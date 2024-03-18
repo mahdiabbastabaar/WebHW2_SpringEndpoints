@@ -1,6 +1,7 @@
 package edu.webclass.restapi.Product.Management.System.controllers;
 
 import edu.webclass.restapi.Product.Management.System.models.Product;
+import edu.webclass.restapi.Product.Management.System.models.dto.ProductDTO;
 import edu.webclass.restapi.Product.Management.System.models.dto.ProductDto;
 import edu.webclass.restapi.Product.Management.System.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,9 @@ public class ProductsController {
     private ProductService productService;
 
     @GetMapping("/list")
-    public List<ProductDto> listAllProducts(){
-        return productService.findAllProducts().stream().map(product -> new ProductDto(product)).toList();
+    public List<ProductDTO> listAllProducts(){
+        return productService.findAllProducts().stream()
+            .map(product -> new ProductDTO(product.getTitle(), product.getBrand(), product.getPrice())).toList();
     }
 
     @PostMapping("/add")
@@ -37,7 +39,7 @@ public class ProductsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
         }
 
-        return ResponseEntity.ok(new ProductDto(product));
+        return ResponseEntity.ok(new ProductDTO(product.getTitle(), product.getBrand(), product.getPrice()));
     }
 
 }
